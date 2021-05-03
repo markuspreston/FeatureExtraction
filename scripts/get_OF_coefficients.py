@@ -3,6 +3,7 @@ from numpy import genfromtxt
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
+## Define the lognormal function (for fitting to input data)
 def lognormal_fcn(t, A, T0, mu, sigma, baseline):
     function = np.zeros(len(t))
 
@@ -14,7 +15,8 @@ def lognormal_fcn(t, A, T0, mu, sigma, baseline):
 
     return function
 
-def d_lognormal_fcn(t, A, T0, mu, sigma):                   ## the time-derivative of the lognormal function above. Note that the baseline disappears (as we assume it to be fixed with time)
+## Define the (time-)derivative of the lognormal function (used to produce the OF coefficients). Note that the baseline is not included, for the OF we assume that it has already been subtracted by other means
+def d_lognormal_fcn(t, A, T0, mu, sigma):
     function = np.zeros(len(t))
 
     for i in range(len(t)):
@@ -25,7 +27,7 @@ def d_lognormal_fcn(t, A, T0, mu, sigma):                   ## the time-derivati
 
     return function
 
-
+## Define the constant fraction discriminator (CFD) signal corresponding to the lognormal function. The CFD signal is the sum of the delayed raw signal and an inverted and attenuated copy of that same signal.
 def lognormal_fcn_CFD(t, A, T0, mu, sigma, CFD_delay, CFD_attenuation):
     CFD_function = np.zeros(len(t))
 
@@ -39,10 +41,9 @@ def lognormal_fcn_CFD(t, A, T0, mu, sigma, CFD_delay, CFD_attenuation):
     return CFD_function
 
 
-## Read the input data. In this case, generated data based on lognormal function:
+## Read the input data from a csv file (in this example case, the input was generated using the 'generate_pulse_data.py' script)
 
-pulse_train = genfromtxt('input_data.csv')
-#print(pulse_train)
+pulse_train = genfromtxt('../data/input_data.csv')
 
 ## You need to know some properties of the input data. That is, how many samples per waveform and how many waveforms in the pulse train?
 N_SAMPLES_PER_WAVEFORM = 100                 ## each waveform should be 100 samples
