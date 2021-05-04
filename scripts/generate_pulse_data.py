@@ -55,56 +55,68 @@ mu = 1.47515
 sigma = 0.610874
 
 
-t_waveform = np.linspace(1, N_SAMPLES_PER_WAVEFORM, N_SAMPLES_PER_WAVEFORM)            ## samples run between 1, 2, 3, ..., N_SAMPLES. Produce a vector of these values denoting the time.
+## samples run between 1, 2, 3, ..., N_SAMPLES_PER_WAVEFORM. Produce a vector of these values denoting the times in each waveform.
+t_waveform = np.linspace(1, N_SAMPLES_PER_WAVEFORM, N_SAMPLES_PER_WAVEFORM)
 
 # This will hold the generated data:
 pulse_train = np.zeros((N_EMPTY_WAVEFORMS + N_REAL_WAVEFORMS)*N_SAMPLES_PER_WAVEFORM)
 
+# This will hold the generated data (with no pile-up pulses, used for fitting in get_OF_coefficients.py):
+pulse_train_no_pileup = np.zeros((N_EMPTY_WAVEFORMS + N_REAL_WAVEFORMS)*N_SAMPLES_PER_WAVEFORM)
+
 # This will hold the (global) time, and is used for plotting only:
 t_pulse_train = np.linspace(1, (N_EMPTY_WAVEFORMS + N_REAL_WAVEFORMS)*N_SAMPLES_PER_WAVEFORM, (N_EMPTY_WAVEFORMS + N_REAL_WAVEFORMS)*N_SAMPLES_PER_WAVEFORM)
 
+# Simple data structure to hold the data that will be exported to a text file. These data will be used as Monte Carlo truth values when analysing the output of the VHDL simulation
 MC_truth_data = np.zeros(shape=(1+N_EMPTY_WAVEFORMS+N_REAL_WAVEFORMS, 4))           ## row 1: header, stores the number of empty waveforms, the number of real waveforms and the number of samples per waveform. The remaining rows store the following data: [A_0, T_0_0, A_1, T_0_1].
 
+## Set the header of the MC truth file:
 MC_truth_data[0,0] = N_EMPTY_WAVEFORMS
 MC_truth_data[0,1] = N_REAL_WAVEFORMS
 MC_truth_data[0,2] = N_SAMPLES_PER_WAVEFORM
 MC_truth_data[0, 3] = -1            ## means no data
 for i in range(N_EMPTY_WAVEFORMS):
     MC_truth_data[1+i,:] = -1               ## the rows where no pulses generated should be filled with -1.
+
+## fill with truth data:
 MC_truth_data[1+N_EMPTY_WAVEFORMS:,0] = A_0_gen
 MC_truth_data[1+N_EMPTY_WAVEFORMS:,1] = T0_0_gen
 MC_truth_data[1+N_EMPTY_WAVEFORMS:,2] = A_1_gen
 MC_truth_data[1+N_EMPTY_WAVEFORMS:,3] = T0_0_gen + Delta_T0_gen
 
+## Now, start generating waveforms:
 for waveform_index in range(N_EMPTY_WAVEFORMS + N_REAL_WAVEFORMS):
-    print('Waveform ' + str(waveform_index))
-    baseline = np.random.normal(baseline_gen_mu, baseline_gen_sigma, N_SAMPLES_PER_WAVEFORM)
+    if (waveform_index % 500 == 0):
+        print('Waveform ' + str(waveform_index))
+
+    baseline = np.random.normal(baseline_gen_mu, baseline_gen_sigma, N_SAMPLES_PER_WAVEFORM)            ## the baseline is generated for every waveform (also the empty ones), by generating gaussian noise with a certain mean and std dev.
 
 
-    if (waveform_index >= N_EMPTY_WAVEFORMS):
+    if (waveform_index >= N_EMPTY_WAVEFORMS):           ## get the signal data from lognormal functions with the appropriate amplitudes and start times:
         signal_0 = generate_lognormal_signal(t_waveform, A_0_gen[waveform_index - N_EMPTY_WAVEFORMS], T0_0_gen[waveform_index - N_EMPTY_WAVEFORMS], mu, sigma, N_SAMPLES_PER_WAVEFORM)
         signal_1 = generate_lognormal_signal(t_waveform, A_1_gen[waveform_index - N_EMPTY_WAVEFORMS], T0_0_gen[waveform_index - N_EMPTY_WAVEFORMS]+Delta_T0_gen[waveform_index - N_EMPTY_WAVEFORMS], mu, sigma, N_SAMPLES_PER_WAVEFORM)
-
-        print('signal 0 A: ' + str(A_0_gen[waveform_index - N_EMPTY_WAVEFORMS]))
-        print('signal 0 T0: ' + str(T0_0_gen[waveform_index - N_EMPTY_WAVEFORMS]))
-    else:
+    else:               ## empty waveform, so both signal 0 and 1 = zero:
         signal_0 = np.zeros(N_SAMPLES_PER_WAVEFORM)
         signal_1 = np.zeros(N_SAMPLES_PER_WAVEFORM)
 
 
+    ## Now, everything in place to produce the waveform. The waveform is the sum of the baseline (including noise) and the two signal shapes. Note that the data is rounded and converted to integer (to emulate dititisation in an ADC)
     pulse_train[waveform_index*N_SAMPLES_PER_WAVEFORM:(waveform_index+1)*N_SAMPLES_PER_WAVEFORM] = np.round(baseline + signal_0 + signal_1).astype(int)
 
+    ## In the get_OF_coefficients.py script, you want to fit to well-isolated pulses to determine the parameters of the OF filter. In reality, you would select well-isolated pulses acquired with a detector for that. Here, we simply generate waveforms definitely pile-up free (so only signal 0 is stored for these data):
+    pulse_train_no_pileup[waveform_index*N_SAMPLES_PER_WAVEFORM:(waveform_index+1)*N_SAMPLES_PER_WAVEFORM] = np.round(baseline + signal_0).astype(int)
 
 
 
-np.savetxt("input_data.csv", pulse_train, fmt='%i')
+## Save the 'input_data.csv' file. This will be the input to the VHDL simulation
+np.savetxt("../data/input_data.csv", pulse_train, fmt='%i')
 
-np.savetxt("MC_truth_data.csv", MC_truth_data, fmt='%f', delimiter=',')
+## Save the 'input_data_no_pileup.csv' file. This will be the input to the get_OF_coefficients.py script
+np.savetxt("../data/input_data_no_pileup.csv", pulse_train_no_pileup, fmt='%i')
 
-print(pulse_train)
+## Save the 'MC_truth_data.csv' file. This will be used when analysing the output from the VHDL simulation.
+np.savetxt("../data/MC_truth_data.csv", MC_truth_data, fmt='%f', delimiter=',')
 
+## For visualisation purposes, plot the entire pulse train:
 plt.plot(t_pulse_train, pulse_train)
-
 plt.show()
-
-
