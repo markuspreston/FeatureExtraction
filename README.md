@@ -31,4 +31,4 @@ Markus Preston, markus.preston@physics.uu.se
 
 [2] M. Preston, "Developments for the FPGA-Based Digitiser in the PANDA Electromagnetic Calorimeters", PhD thesis, Stockholm University, Stockholm, Sweden, 2020. (http://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Asu%3Adiva-179733)
 
-[3] M.Preston et al, "A feature-extraction and pile-up reconstruction algorithm for the forward-spectrometer EMC of the PANDA experiment", to be published, 2021.
+[3] M. Preston et al, "A feature-extraction and pile-up reconstruction algorithm for the forward-spectrometer EMC of the PANDA experiment", to be published, 2021.
