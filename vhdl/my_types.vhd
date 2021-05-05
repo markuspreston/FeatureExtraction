@@ -8,7 +8,7 @@
 -- AND FITNESS FOR A PARTICULAR PURPOSE. Please see the CERN-OHL-W v2
 -- for applicable conditions.
 --
--- Source location: XXXXXX
+-- Source location: https://github.com/markuspreston/FeatureExtraction/
 -- As per CERN-OHL-W v2 section 4.1, should You produce hardware based on
 -- these sources, You must maintain the Source Location visible on the
 -- external case of the hardware or other product you make using
@@ -19,6 +19,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Using arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
+
+
+-- The data types defined here are used in the main code. Normally the types define arrays (i. e. buffers of integers or data), or state variables. Please see the other .vhd files for reference to usage.
 
 package my_types is
 

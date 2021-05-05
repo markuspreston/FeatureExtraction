@@ -1,0 +1,1 @@
+Any modifications to the provided code should be accompanied by a brief description of the modification(s) and the date they were made in this file. According to section 3.3b of the licence (see LICENCE), licensees should provide a brief entry with a date and the nature of the modification for each design change. Information should never be removed from this file.

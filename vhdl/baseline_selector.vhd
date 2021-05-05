@@ -8,7 +8,7 @@
 -- AND FITNESS FOR A PARTICULAR PURPOSE. Please see the CERN-OHL-W v2
 -- for applicable conditions.
 --
--- Source location: XXXXXX
+-- Source location: https://github.com/markuspreston/FeatureExtraction/
 -- As per CERN-OHL-W v2 section 4.1, should You produce hardware based on
 -- these sources, You must maintain the Source Location visible on the
 -- external case of the hardware or other product you make using
