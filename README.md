@@ -21,12 +21,14 @@ The repository is divided into three directories: data, scripts and vhdl. To run
 It is again worth to emphasise that the example cases provided do *not* come from experiment or detector simulation. They have been generated using a log-normal function that was found to describe our pulses well. Therefore, the example case does not account for detector resolution and so on. You should replace the generate_pulse_data.py with some other source of signals (simulation or experiment) to test the performance under more realistic conditions (which was also done in [2, 3]).
 
 ## Licensing
-The Python scripts in the scripts directory are provided under the MIT license. The VHDL code is provided under the weakly reciprocal CERN-OHL-W v2 license. Please see the LICENSE files in the directories scripts and vhdl for the details.
+The Python scripts in the scripts directory are provided under the MIT license. The VHDL code is provided under the weakly reciprocal CERN-OHL-W v2 license. Please see the LICENSE files in the "scripts" and "vhdl" directories for the details.
 
 ## Contact
 Markus Preston, markus.preston@physics.uu.se
 
 ## References
 [1] W. E. Cleland and E. G. Stern, "Signal processing considerations for liquid ionization calorimeters in a high rate environment", Nucl. Instrum. Methods Phys. Res. A 338(2-3), pp. 467-497, 1993. (https://doi.org/10.1016/0168-9002(94)91332-3)
+
 [2] M. Preston, "Developments for the FPGA-Based Digitiser in the PANDA Electromagnetic Calorimeters", PhD thesis, Stockholm University, Stockholm, Sweden, 2020. (http://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Asu%3Adiva-179733)
+
 [3] M.Preston et al, "A feature-extraction and pile-up reconstruction algorithm for the forward-spectrometer EMC of the PANDA experiment", to be published, 2021.
