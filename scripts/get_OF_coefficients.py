@@ -261,16 +261,17 @@ for BCFD_window in range(N_BCFD_WINDOWS):
         b_quantised[BCFD_window, OF_index] = np.round(b[BCFD_window, OF_index]*np.power(2, b_scaling))
 
 ## Print the values to terminal. These arrays should be copied/pasted into the VHDL code.
-print('quantised g:')
+print('FIR_coefficients_a:')
+print(repr(a_quantised))
+print('FIR_coefficients_b:')
+print(repr(b_quantised))
+
+print('g_values:')
 print(repr(g_quantised))
 
-print('quantised d_g:')
+print('d_g_values:')
 print(repr(d_g_quantised))
 
-print('quantised a:')
-print(repr(a_quantised))
-print('quantised b:')
-print(repr(b_quantised))
 
 print(a_scaling)
 print(b_scaling)
