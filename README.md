@@ -1,4 +1,6 @@
 # A feature-extraction and pile-up reconstruction algorithm for the forward-spectrometer EMC of the PANDA experiment
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4742698.svg)](https://doi.org/10.5281/zenodo.4742698)
+
 This is an algorithm for real-time reconstruction of pulses from a detector (in our case an electromagnetic calorimeter) in real time using an FPGA. The algorithm has been developed to handle pile-up of signals, such as in a high-radiation environment. The algorithm combines a digital implementation of the constant fraction discriminator algorithm and the optimal filter [1] algorithm to determine pulse amplitude and timing and to reconstruct the pulse tail. In the current implementation, the method allows reconstruction of two pulses superimposed on one another (that is, the 'first pulse' and the 'pile-up pulse'). Nonetheless, this could probably be extended should sufficient resources be available in the target device.
 
 The algorithm has been documented elsewhere, and therefore this readme file is rather short. The main references would be [2] and [3]. However, a few lines about the structure of the repository and how to run the code is appropriate. First, some initial remarks:
